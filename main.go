@@ -27,6 +27,13 @@ func getStoragePath() string {
 	return home + "/.gotodo.json"
 }
 
+func reindexTasks(tasks []Task) []Task {
+	for i := range tasks {
+		tasks[i].ID = i + 1
+	}
+	return tasks
+}
+
 func saveTasks(tasks []Task) error {
 	data, err := json.MarshalIndent(tasks, "", "  ")
 	if err != nil {
@@ -89,8 +96,9 @@ func main() {
 		newTask.UpdateStatus("Created")
 
 		tasks = append(tasks, newTask)
+		tasks = reindexTasks(tasks)
 		saveTasks(tasks)
-		fmt.Printf("Successfully added: %s\n", description)
+		fmt.Printf("Successfully added: %s\n , and tasks are re-indexed successfully.", description)
 
 	case "list":
 		if len(tasks) == 0 {
@@ -159,8 +167,9 @@ func main() {
 		}
 
 		if found {
+			newTasks = reindexTasks(newTasks)
 			saveTasks(newTasks)
-			fmt.Printf("Task %d deleted.\n", id)
+			fmt.Printf("Task %d deleted, re-indexed all remaining.\n", id)
 		} else {
 			fmt.Printf("Task %d not found.\n", id)
 		}
