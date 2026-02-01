@@ -93,9 +93,20 @@ func main() {
 		fmt.Printf("Successfully added: %s\n", description)
 
 	case "list":
-		fmt.Println("---MY TODO LIST---")
+		if len(tasks) == 0 {
+			fmt.Println("Your list is empty. Add something with 'gotodo add'!")
+			return
+		}
+
+		fmt.Println("ID  | Status      | Description")
+		fmt.Println("----|-------------|------------")
 		for _, t := range tasks {
-			fmt.Printf("%d. [%s] %s\n", t.ID, t.Status, t.Description)
+			fmt.Printf("%-3d | %-11s | %s\n", t.ID, t.Status, t.Description)
+
+			for _, logEntry := range t.Log {
+				fmt.Printf("   -> %s\n", logEntry)
+			}
+			fmt.Println("----|-------------|------------")
 		}
 
 	case "update":
