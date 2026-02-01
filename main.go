@@ -255,6 +255,26 @@ func main() {
 			fmt.Printf("\nFound %d result(s).\n", foundCount)
 		}
 
+	case "widget":
+		if len(tasks) == 0 {
+			fmt.Println("No tasks!")
+			return
+		}
+
+		found := false
+
+		for _, t := range tasks {
+			if strings.ToLower(t.Status) == "done" {
+				continue
+			}
+			fmt.Printf("[%s] %s\n", t.Status, t.Description)
+			found = true
+		}
+
+		if !found {
+			fmt.Println("All caught up! 🎉")
+		}
+
 	case "help":
 		printHelp()
 
