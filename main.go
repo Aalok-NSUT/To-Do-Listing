@@ -131,26 +131,39 @@ func main() {
 		tasks = append(tasks, newTask)
 		tasks = reindexTasks(tasks)
 		saveTasks(tasks)
-		fmt.Printf("Successfully added: %s\n , and tasks are re-indexed successfully.\n", description)
+		fmt.Printf("Successfully added: %s , and tasks are re-indexed successfully.\n", description)
 
 	case "list":
 		if len(tasks) == 0 {
-			fmt.Println("Your list is empty. Add something with 'gotodo add'!")
+			fmt.Println("Your list is empty.")
 			return
 		}
 
 		fmt.Println("ID  | Status      | Description")
 		fmt.Println("----|-------------|------------")
 		for _, t := range tasks {
-			statusColor := ColorYellow
-			if strings.ToLower(t.Status) == "done" {
+			var statusColor string
+
+			// Match the color to the validated status
+			switch strings.ToLower(t.Status) {
+			case "todo":
+				statusColor = ColorYellow
+			case "in-progress":
+				statusColor = ColorCyan
+			case "done":
 				statusColor = ColorGreen
+			case "blocked":
+				statusColor = ColorRed
+			default:
+				statusColor = ColorReset
 			}
 
-			fmt.Printf("%-3d | %s%-11s%s | %s\n", t.ID, statusColor, t.Status, ColorReset, t.Description)
+			fmt.Printf("%-3d | %s%-11s%s | %s\n",
+				t.ID, statusColor, t.Status, ColorReset, t.Description)
 
+			// Let's keep the logs subtle with Cyan
 			for _, logEntry := range t.Log {
-				fmt.Printf("   %s-> %s%s\n", ColorCyan, logEntry, ColorReset)
+				fmt.Printf("    %s-> %s%s\n", ColorCyan, logEntry, ColorReset)
 			}
 			fmt.Println("----|-------------|------------")
 		}
@@ -178,7 +191,7 @@ func main() {
 
 		for i := range tasks {
 			if tasks[i].ID == id {
-				tasks[i].UpdateStatus(newStatus)
+				tasks[i].UpdateStatus(strings.ToTitle(newStatus))
 				found = true
 				break
 			}
