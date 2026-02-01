@@ -1,0 +1,10 @@
+# Binary files
+gotodo
+gotodo.exe
+
+# Local data (if you still have any tasks.json)
+tasks.json
+.gotodo.json
+
+# Go workspace files
+go.work
