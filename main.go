@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -173,7 +174,30 @@ func main() {
 		} else {
 			fmt.Printf("Task %d not found.\n", id)
 		}
+	case "search":
+		if len(os.Args) < 3 {
+			fmt.Println("Usage: gotodo search [keyword]")
+			return
+		}
 
+		query := strings.ToLower(os.Args[2])
+		fmt.Printf("Searching for: '%s'...\n", query)
+		fmt.Println("-------------------------------")
+
+		foundCount := 0
+
+		for _, t := range tasks {
+			if strings.Contains(strings.ToLower(t.Description), query) {
+				fmt.Printf("%d. [%s] %s\n", t.ID, t.Status, t.Description)
+				foundCount++
+			}
+		}
+
+		if foundCount == 0 {
+			fmt.Println("No tasks found matching that keyword")
+		} else {
+			fmt.Printf("\nFound %d result(s).\n", foundCount)
+		}
 	default:
 		fmt.Println("Unknown command. Use 'add' or 'list'.")
 	}
