@@ -99,7 +99,7 @@ func main() {
 		tasks = append(tasks, newTask)
 		tasks = reindexTasks(tasks)
 		saveTasks(tasks)
-		fmt.Printf("Successfully added: %s\n , and tasks are re-indexed successfully.", description)
+		fmt.Printf("Successfully added: %s\n , and tasks are re-indexed successfully.\n", description)
 
 	case "list":
 		if len(tasks) == 0 {
