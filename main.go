@@ -65,6 +65,19 @@ func loadTasks() ([]Task, error) {
 	return tasks, nil
 }
 
+func printHelp() {
+	fmt.Println("gotodo - A simple CLI task manager")
+	fmt.Println("\nUsage:")
+	fmt.Println("  gotodo [command] [arguments]")
+	fmt.Println("\nAvailable Commands:")
+	fmt.Println("  add [text]          Add a new task")
+	fmt.Println("  list                List all tasks and their logs")
+	fmt.Println("  update [id] [stat]  Update task status (e.g., 'Done')")
+	fmt.Println("  delete [id]         Remove a task by ID")
+	fmt.Println("  search [query]      Find tasks by keyword")
+	fmt.Println("  help                Show this menu")
+}
+
 func main() {
 	tasks, err := loadTasks()
 	if err != nil {
@@ -198,7 +211,12 @@ func main() {
 		} else {
 			fmt.Printf("\nFound %d result(s).\n", foundCount)
 		}
+
+	case "help":
+		printHelp()
+
 	default:
-		fmt.Println("Unknown command. Use 'add' or 'list'.")
+		fmt.Printf("Unknown command: '%s'\n\n.", command)
+		printHelp()
 	}
 }
