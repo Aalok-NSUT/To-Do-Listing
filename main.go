@@ -261,18 +261,33 @@ func main() {
 			return
 		}
 
-		found := false
+		activeCount := 0
 
 		for _, t := range tasks {
 			if strings.ToLower(t.Status) == "done" {
 				continue
 			}
-			fmt.Printf("[%s] %s\n", t.Status, t.Description)
-			found = true
+
+			activeCount++
+			var conkyColor string
+			switch strings.ToLower(t.Status) {
+			case "todo":
+				conkyColor = "${color yellow}"
+			case "in-progress":
+				conkyColor = "${color cyan}"
+			case "blocked":
+				conkyColor = "${color red}"
+			default:
+				conkyColor = "${color white}"
+			}
+
+			fmt.Printf("%s[%s] %s\n", conkyColor, t.Status, t.Description)
 		}
 
-		if !found {
-			fmt.Println("All caught up! 🎉")
+		if activeCount == 0 {
+			fmt.Println("${color #00FF00} All clear!")
+		} else {
+			fmt.Printf("${color #FFFFFF}Pending: %d\n", activeCount)
 		}
 
 	case "help":
