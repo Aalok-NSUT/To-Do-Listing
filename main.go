@@ -9,6 +9,14 @@ import (
 	"time"
 )
 
+const (
+	ColorReset  = "\033[0m"
+	ColorRed    = "\033[31m"
+	ColorGreen  = "\033[32m"
+	ColorYellow = "\033[33m"
+	ColorCyan   = "\033[36m"
+)
+
 type Task struct {
 	ID          int      `json:"id"`
 	Description string   `json:"description"`
@@ -123,10 +131,15 @@ func main() {
 		fmt.Println("ID  | Status      | Description")
 		fmt.Println("----|-------------|------------")
 		for _, t := range tasks {
-			fmt.Printf("%-3d | %-11s | %s\n", t.ID, t.Status, t.Description)
+			statusColor := ColorYellow
+			if strings.ToLower(t.Status) == "done" {
+				statusColor = ColorGreen
+			}
+
+			fmt.Printf("%-3d | %s%-11s%s | %s\n", t.ID, statusColor, t.Status, ColorReset, t.Description)
 
 			for _, logEntry := range t.Log {
-				fmt.Printf("   -> %s\n", logEntry)
+				fmt.Printf("   %s-> %s%s\n", ColorCyan, logEntry, ColorReset)
 			}
 			fmt.Println("----|-------------|------------")
 		}
