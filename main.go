@@ -17,6 +17,8 @@ const (
 	ColorCyan   = "\033[36m"
 )
 
+var allowedStatuses = []string{"todo", "in-progress", "done", "blocked"}
+
 type Task struct {
 	ID          int      `json:"id"`
 	Description string   `json:"description"`
@@ -71,6 +73,15 @@ func loadTasks() ([]Task, error) {
 	}
 
 	return tasks, nil
+}
+
+func isValidStatus(status string) bool {
+	for _, s := range allowedStatuses {
+		if strings.ToLower(status) == s {
+			return true
+		}
+	}
+	return false
 }
 
 func printHelp() {
@@ -157,6 +168,12 @@ func main() {
 		}
 
 		newStatus := os.Args[3]
+		if !isValidStatus(newStatus) {
+			fmt.Printf("Error: '%s' is not a valid status.\n", newStatus)
+			fmt.Printf("Allowed: %v\n", allowedStatuses)
+			return
+		}
+
 		found := false
 
 		for i := range tasks {
